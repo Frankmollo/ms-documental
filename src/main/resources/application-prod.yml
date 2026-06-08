@@ -1,0 +1,19 @@
+aws:
+  s3:
+    endpoint-url:
+    use-iam: true
+  dynamodb:
+    endpoint-url:
+    use-iam: true
+
+dms:
+  security:
+    enabled: true
+    enforce-api-key: true
+    require-user-id: true
+  upload:
+    require-meter-id: true
+
+logging:
+  level:
+    com.lostres.ms_documental_dms: INFO

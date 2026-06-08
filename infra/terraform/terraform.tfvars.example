@@ -1,0 +1,15 @@
+aws_region  = "us-east-1"
+environment = "prod"
+
+# Debe ser único globalmente en S3
+s3_bucket_name = "lostres-dms-prod-documents"
+
+documents_table_name = "dms-documents"
+audit_table_name     = "dms-audit-logs"
+
+cors_allowed_origins = [
+  "https://app.lostres.com",
+  "http://localhost:4200"
+]
+
+enable_point_in_time_recovery = true

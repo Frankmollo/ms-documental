@@ -1,0 +1,56 @@
+spring:
+  application:
+    name: ms-documental-dms
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: when_authorized
+  health:
+    db:
+      enabled: false
+
+aws:
+  s3:
+    region: ${AWS_REGION:us-east-1}
+    access-key: ${AWS_ACCESS_KEY:mock-key}
+    secret-key: ${AWS_SECRET_KEY:mock-secret}
+    bucket-name: ${AWS_BUCKET_NAME:lostres-dms-bucket}
+    endpoint-url: ${AWS_ENDPOINT_URL:}
+    public-endpoint-url: ${AWS_PUBLIC_ENDPOINT_URL:}
+    use-iam: ${AWS_USE_IAM:false}
+  dynamodb:
+    region: ${AWS_REGION:us-east-1}
+    access-key: ${AWS_ACCESS_KEY:mock-key}
+    secret-key: ${AWS_SECRET_KEY:mock-secret}
+    endpoint-url: ${AWS_ENDPOINT_URL:}
+    use-iam: ${AWS_USE_IAM:false}
+    documents-table: ${DYNAMODB_DOCUMENTS_TABLE:dms-documents}
+    audit-table: ${DYNAMODB_AUDIT_TABLE:dms-audit-logs}
+
+dms:
+  security:
+    enabled: ${SECURITY_ENABLED:false}
+    enforce-api-key: ${ENFORCE_API_KEY:false}
+    api-key: ${SERVICE_API_KEY:}
+    require-user-id: ${REQUIRE_USER_ID:true}
+  upload:
+    max-size-bytes: ${MAX_FILE_SIZE_BYTES:52428800}
+    require-meter-id: ${REQUIRE_METER_ID:false}
+    allowed-content-types: application/pdf,image/jpeg,image/png,image/tiff,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/msword,application/acad,image/vnd.dwg,application/dwg
+  cleanup:
+    enabled: true
+    pending-expiration-hours: ${PENDING_EXPIRATION_HOURS:24}
+  rate-limit:
+    enabled: ${RATE_LIMIT_ENABLED:true}
+    requests-per-window: ${RATE_LIMIT_REQUESTS_PER_WINDOW:60}
+    window-seconds: ${RATE_LIMIT_WINDOW_SECONDS:60}
