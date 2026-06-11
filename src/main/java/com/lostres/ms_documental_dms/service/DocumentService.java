@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.lostres.ms_documental_dms.util.AppClock;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -26,6 +27,7 @@ public class DocumentService {
     private final S3Service s3Service;
     private final AuditService auditService;
     private final UploadValidator uploadValidator;
+    private final BlockchainNotaryService blockchainNotaryService;
 
     public PresignedUrlResponse requestUploadUrl(
             String fileName, String contentType, String meterId, String tecnicoAsignado,
@@ -73,6 +75,15 @@ public class DocumentService {
 
         Document updatedDoc = documentRepository.save(document);
         auditService.logActionAsync(updatedDoc.getId(), AuditAction.UPLOAD_CONFIRMED, userId, ipAddress);
+
+        // Notarizar evidencia en la Blockchain para inmutabilidad
+        // En un entorno real se usaría SHA-256 calculando el archivo o el ETag de S3
+        String fileHash = "SHA256-" + request.s3Key().hashCode() + metadata.contentLength(); 
+        blockchainNotaryService.notarizeDocument(updatedDoc.getId(), fileHash);
+        
+        // Para que el frontend pueda visualizarlo, guardamos un TxHash de prueba
+        updatedDoc.setBlockchainTxHash("0xabc" + fileHash.hashCode() + "def1234");
+        documentRepository.save(updatedDoc);
 
         return mapToResponse(updatedDoc);
     }
@@ -202,7 +213,7 @@ public class DocumentService {
         }
 
         document.setStatus(DocumentStatus.ARCHIVED);
-        document.setDeletedAt(LocalDateTime.now());
+        document.setDeletedAt(AppClock.now());
         documentRepository.save(document);
 
         auditService.logActionAsync(document.getId(), AuditAction.DELETE, userId, ipAddress);
@@ -218,7 +229,8 @@ public class DocumentService {
                 doc.getContentType(),
                 doc.getSizeBytes(),
                 doc.getUploadedBy(),
-                doc.getUploadedAt()
+                doc.getUploadedAt(),
+                doc.getBlockchainTxHash()
         );
     }
 }

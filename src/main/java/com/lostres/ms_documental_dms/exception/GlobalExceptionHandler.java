@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.lostres.ms_documental_dms.util.AppClock;
 import java.time.LocalDateTime;
 import java.util.Map;
 
@@ -28,7 +29,7 @@ public class GlobalExceptionHandler {
 
     private ResponseEntity<Map<String, Object>> buildErrorResponse(HttpStatus status, String message) {
         return ResponseEntity.status(status).body(Map.of(
-                "timestamp", LocalDateTime.now(),
+                "timestamp", AppClock.now(),
                 "status", status.value(),
                 "error", status.getReasonPhrase(),
                 "message", message

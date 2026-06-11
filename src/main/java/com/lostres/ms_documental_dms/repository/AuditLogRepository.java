@@ -12,6 +12,7 @@ import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.QueryRequest;
 
+import com.lostres.ms_documental_dms.util.AppClock;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -33,7 +34,7 @@ public class AuditLogRepository {
             auditLog.setId(UUID.randomUUID());
         }
         if (auditLog.getTimestamp() == null) {
-            auditLog.setTimestamp(LocalDateTime.now());
+            auditLog.setTimestamp(AppClock.now());
         }
 
         dynamoDbClient.putItem(PutItemRequest.builder()

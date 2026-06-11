@@ -25,4 +25,5 @@ public class Document {
     private String uploadedBy;
     private LocalDateTime uploadedAt;
     private LocalDateTime deletedAt;
+    private String blockchainTxHash;
 }

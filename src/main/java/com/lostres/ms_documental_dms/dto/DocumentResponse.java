@@ -13,5 +13,6 @@ public record DocumentResponse(
     String contentType,
     Long sizeBytes,
     String uploadedBy,
-    LocalDateTime uploadedAt
+    LocalDateTime uploadedAt,
+    String blockchainTxHash
 ) {}

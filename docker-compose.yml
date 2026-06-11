@@ -26,8 +26,10 @@ services:
     build: .
     container_name: dms-app
     ports:
-      - "8080:8080"
+      - "8081:8080"
     environment:
+      TZ: America/La_Paz
+      APP_TIMEZONE: America/La_Paz
       SPRING_PROFILES_ACTIVE: dev
       AWS_ENDPOINT_URL: http://localstack:4566
       AWS_PUBLIC_ENDPOINT_URL: http://localhost:4566

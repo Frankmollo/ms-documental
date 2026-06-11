@@ -14,6 +14,7 @@ import software.amazon.awssdk.services.dynamodb.model.GetItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.QueryRequest;
 
+import com.lostres.ms_documental_dms.util.AppClock;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -36,7 +37,7 @@ public class DocumentRepository {
             document.setId(UUID.randomUUID());
         }
         if (document.getUploadedAt() == null) {
-            document.setUploadedAt(LocalDateTime.now());
+            document.setUploadedAt(AppClock.now());
         }
         if (document.getStatus() == null) {
             document.setStatus(DocumentStatus.PENDING);

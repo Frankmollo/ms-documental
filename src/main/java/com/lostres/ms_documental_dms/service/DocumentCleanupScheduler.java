@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import com.lostres.ms_documental_dms.util.AppClock;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class DocumentCleanupScheduler {
             return;
         }
 
-        LocalDateTime cutoff = LocalDateTime.now()
+        LocalDateTime cutoff = AppClock.now()
                 .minusHours(dmsProperties.getCleanup().getPendingExpirationHours());
 
         List<Document> expired = documentRepository.findByDeletedAtIsNullAndStatusAndUploadedAtBefore(
